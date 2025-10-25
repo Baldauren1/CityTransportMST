@@ -15,7 +15,7 @@ public class Graph {
         addNode(to);
 
         adjacencyList.get(from).add(new Edge(from, to, weight));
-        adjacencyList.get(to).add(new Edge(to, from, weight)); // так как граф неориентированный
+        adjacencyList.get(to).add(new Edge(to, from, weight));
     }
 
     public Set<String> getNodes() {
@@ -39,6 +39,6 @@ public class Graph {
     }
 
     public int getEdgeCount() {
-        return getAllEdges().size() / 2; // делим на 2, т.к. граф неориентированный
+        return getAllEdges().size() / 2;
     }
 }
