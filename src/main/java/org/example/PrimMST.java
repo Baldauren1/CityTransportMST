@@ -35,4 +35,9 @@ public class PrimMST {
     public int getOperationCount() {
         return operationCount;
     }
+
+    public MSTResult run(Graph graph) {
+        List<Edge> mst = findMST(graph);
+        return MSTResult.fromEdges(mst, getOperationCount());
+    }
 }

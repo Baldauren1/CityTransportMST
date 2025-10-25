@@ -9,16 +9,13 @@ public class KruskalMST {
         List<Edge> mst = new ArrayList<>();
         UnionFind uf = new UnionFind();
 
-        // 1 — makeSet for each node
         for (String node : graph.getNodes()) {
             uf.makeSet(node);
         }
 
-        // 2 — sort edges by weight
         List<Edge> edges = graph.getAllEdges();
         edges.sort(Comparator.comparingInt(Edge::getWeight));
 
-        // 3 — Kruskal
         for (Edge edge : edges) {
             operationCount++;
             String rootA = uf.find(edge.getFrom());
@@ -38,5 +35,10 @@ public class KruskalMST {
 
     public int getOperationCount() {
         return operationCount;
+    }
+
+    public MSTResult run(Graph graph) {
+        List<Edge> mst = findMST(graph);
+        return MSTResult.fromEdges(mst, getOperationCount());
     }
 }
