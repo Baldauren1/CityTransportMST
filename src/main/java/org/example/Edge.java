@@ -1,6 +1,6 @@
 package org.example;
 
-public class Edge implements Comparable<Edge> {
+public class Edge {
     private final String from;
     private final String to;
     private final int weight;
@@ -24,13 +24,7 @@ public class Edge implements Comparable<Edge> {
     }
 
     @Override
-    public int compareTo(Edge other) {
-        return Integer.compare(this.weight, other.weight);
-    }
-
-    @Override
     public String toString() {
         return from + " - " + to + " (" + weight + ")";
     }
 }
-
