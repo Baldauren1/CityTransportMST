@@ -5,12 +5,16 @@ import java.util.*;
 public class Graph {
     private final Map<String, List<Edge>> adjacencyList = new HashMap<>();
 
+    public void addNode(String node) {
+        adjacencyList.putIfAbsent(node, new ArrayList<>());
+    }
+
     public void addEdge(String from, String to, int weight) {
         adjacencyList.putIfAbsent(from, new ArrayList<>());
         adjacencyList.putIfAbsent(to, new ArrayList<>());
 
         adjacencyList.get(from).add(new Edge(from, to, weight));
-        adjacencyList.get(to).add(new Edge(to, from, weight)); // because undirected graph
+        adjacencyList.get(to).add(new Edge(to, from, weight)); // undirected
     }
 
     public Set<String> getNodes() {
