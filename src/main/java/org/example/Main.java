@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("=== City Transport MST: Prim Test ===");
 
         Graph graph = new Graph();
         graph.addEdge("A", "B", 4);
@@ -15,19 +14,32 @@ public class Main {
         graph.addEdge("C", "E", 8);
         graph.addEdge("D", "E", 6);
 
+        System.out.println("=== City Transport MST: Prim ===");
         PrimMST prim = new PrimMST();
-        List<Edge> mst = prim.findMST(graph);
+        List<Edge> primEdges = prim.findMST(graph);
+        MSTResult primResult = MSTResult.fromEdges(primEdges, prim.getOperationCount());
+        primResult.print();
 
-        System.out.println("\nMST edges:");
-        int totalCost = 0;
-        for (Edge e : mst) {
-            System.out.println(e);
-            totalCost += e.getWeight();
+        System.out.println("\n=== City Transport MST: Kruskal ===");
+        KruskalMST kruskal = new KruskalMST();
+        List<Edge> kruskalEdges = kruskal.findMST(graph);
+        MSTResult kruskalResult = MSTResult.fromEdges(kruskalEdges, kruskal.getOperationCount());
+        kruskalResult.print();
+
+        System.out.println("\n=== Comparison ===");
+        if (primResult.totalCost == kruskalResult.totalCost) {
+            System.out.println(" Same total cost: " + primResult.totalCost);
+        } else {
+            System.out.println(" Different total cost: Prim = " + primResult.totalCost +
+                    ", Kruskal = " + kruskalResult.totalCost);
         }
 
-        System.out.println("\nTotal cost: " + totalCost);
-        System.out.println("Operations: " + prim.getOperationCount());
-        System.out.println("Vertices: " + graph.getVertexCount());
-        System.out.println("Edges: " + graph.getEdgeCount());
+        if (primResult.edges.size() == kruskalResult.edges.size()) {
+            System.out.println(" Same number of edges: " + primResult.edges.size());
+        } else {
+            System.out.println(" Different number of edges");
+        }
+
+        System.out.println("\nDone.");
     }
 }
