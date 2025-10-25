@@ -1,45 +1,68 @@
 package org.example;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
+
     public static void main(String[] args) {
 
-        Graph graph = new Graph();
-        graph.addEdge("A", "B", 4);
-        graph.addEdge("A", "C", 3);
-        graph.addEdge("B", "C", 2);
-        graph.addEdge("B", "D", 5);
-        graph.addEdge("C", "D", 7);
-        graph.addEdge("C", "E", 8);
-        graph.addEdge("D", "E", 6);
+        String inputPath = "src/main/resources/ass_3_input.json";
+        String outputPath = "src/main/resources/ass_3_output.json";
 
-        System.out.println("=== City Transport MST: Prim ===");
-        PrimMST prim = new PrimMST();
-        List<Edge> primEdges = prim.findMST(graph);
-        MSTResult primResult = MSTResult.fromEdges(primEdges, prim.getOperationCount());
-        primResult.print();
+        List<JsonGraphReader.JsonGraph> jsonGraphs = JsonGraphReader.readInput(inputPath);
+        JsonResultWriter writer = new JsonResultWriter();
 
-        System.out.println("\n=== City Transport MST: Kruskal ===");
-        KruskalMST kruskal = new KruskalMST();
-        List<Edge> kruskalEdges = kruskal.findMST(graph);
-        MSTResult kruskalResult = MSTResult.fromEdges(kruskalEdges, kruskal.getOperationCount());
-        kruskalResult.print();
+        for (JsonGraphReader.JsonGraph jsonGraph : jsonGraphs) {
 
-        System.out.println("\n=== Comparison ===");
-        if (primResult.totalCost == kruskalResult.totalCost) {
-            System.out.println(" Same total cost: " + primResult.totalCost);
-        } else {
-            System.out.println(" Different total cost: Prim = " + primResult.totalCost +
-                    ", Kruskal = " + kruskalResult.totalCost);
+            // Build graph
+            Graph graph = new Graph();
+            for (String n : jsonGraph.nodes) {
+                graph.addNode(n);
+            }
+            for (var e : jsonGraph.edges) {
+                String from = (String) e.get("from");
+                String to = (String) e.get("to");
+                int weight = ((Double) e.get("weight")).intValue();
+                graph.addEdge(from, to, weight);
+            }
+
+            // Run Prim
+            PrimMST prim = new PrimMST();
+            long startPrim = System.currentTimeMillis();
+            MSTResult primResult = prim.run(graph);
+            long endPrim = System.currentTimeMillis();
+            long primTime = endPrim - startPrim;
+
+            // Run Kruskal
+            KruskalMST kruskal = new KruskalMST();
+            long startKruskal = System.currentTimeMillis();
+            MSTResult kruskalResult = kruskal.run(graph);
+            long endKruskal = System.currentTimeMillis();
+            long kruskalTime = endKruskal - startKruskal;
+
+            // Write to result JSON
+            Map<String, Object> result = new HashMap<>();
+            result.put("graph_id", jsonGraph.id);
+            result.put("input_stats", Map.of(
+                    "vertices", jsonGraph.nodes.size(),
+                    "edges", jsonGraph.edges.size()
+            ));
+            result.put("prim", Map.of(
+                    "total_cost", primResult.totalCost,
+                    "operations_count", primResult.operations,
+                    "execution_time_ms", primTime
+            ));
+            result.put("kruskal", Map.of(
+                    "total_cost", kruskalResult.totalCost,
+                    "operations_count", kruskalResult.operations,
+                    "execution_time_ms", kruskalTime
+            ));
+            writer.addResult(result);
         }
 
-        if (primResult.edges.size() == kruskalResult.edges.size()) {
-            System.out.println(" Same number of edges: " + primResult.edges.size());
-        } else {
-            System.out.println(" Different number of edges");
-        }
-
-        System.out.println("\nDone.");
+        writer.writeOutput(outputPath);
+        System.out.println(" Done. Results written to ass_3_output.json");
     }
 }
