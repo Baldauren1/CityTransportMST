@@ -3,19 +3,14 @@ package org.example;
 import java.util.*;
 
 public class Graph {
-
     private final Map<String, List<Edge>> adjacencyList = new HashMap<>();
 
-    public void addNode(String node) {
-        adjacencyList.putIfAbsent(node, new ArrayList<>());
-    }
-
     public void addEdge(String from, String to, int weight) {
-        addNode(from);
-        addNode(to);
+        adjacencyList.putIfAbsent(from, new ArrayList<>());
+        adjacencyList.putIfAbsent(to, new ArrayList<>());
 
         adjacencyList.get(from).add(new Edge(from, to, weight));
-        adjacencyList.get(to).add(new Edge(to, from, weight));
+        adjacencyList.get(to).add(new Edge(to, from, weight)); // because undirected graph
     }
 
     public Set<String> getNodes() {
@@ -23,13 +18,13 @@ public class Graph {
     }
 
     public List<Edge> getEdgesFrom(String node) {
-        return adjacencyList.getOrDefault(node, new ArrayList<>());
+        return adjacencyList.getOrDefault(node, Collections.emptyList());
     }
 
     public List<Edge> getAllEdges() {
         List<Edge> edges = new ArrayList<>();
-        for (List<Edge> list : adjacencyList.values()) {
-            edges.addAll(list);
+        for (String node : adjacencyList.keySet()) {
+            edges.addAll(adjacencyList.get(node));
         }
         return edges;
     }
@@ -39,6 +34,6 @@ public class Graph {
     }
 
     public int getEdgeCount() {
-        return getAllEdges().size() / 2;
+        return getAllEdges().size() / 2; // divided by 2 because graph is undirected
     }
 }
