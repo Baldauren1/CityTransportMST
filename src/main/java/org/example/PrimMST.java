@@ -3,82 +3,36 @@ package org.example;
 import java.util.*;
 
 public class PrimMST {
+    private int operationCount = 0;
 
-    public static class Result {
-        public final List<Edge> mstEdges = new ArrayList<>();
-        public long totalCost = 0;
-        public long operations = 0;        // rough count of key ops (push/poll/comparisons)
-        public double executionTimeMs = 0;
-        public int vertices = 0;
-        public int edges = 0;
-        public boolean connected = false;  // true if MST has V-1 edges
-    }
-
-    public Result run(Graph graph) {
-        Result res = new Result();
-        long start = System.nanoTime();
-
-        if (graph == null) {
-            res.executionTimeMs = (System.nanoTime() - start) / 1_000_000.0;
-            return res;
-        }
-
-        int V = graph.getVertexCount();
-        res.vertices = V;
-        res.edges = graph.getEdgeCount();
-
-        if (V == 0) {
-            res.executionTimeMs = (System.nanoTime() - start) / 1_000_000.0;
-            return res;
-        }
-
-        PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparingInt(Edge::getWeight));
+    public List<Edge> findMST(Graph graph) {
         Set<String> visited = new HashSet<>();
+        List<Edge> mstEdges = new ArrayList<>();
+        PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparingInt(Edge::getWeight));
 
-        Iterator<String> it = graph.getNodes().iterator();
-        if (!it.hasNext()) {
-            res.executionTimeMs = (System.nanoTime() - start) / 1_000_000.0;
-            return res;
-        }
-        String startNode = it.next();
-        visited.add(startNode);
+        String start = graph.getNodes().iterator().next();
+        visited.add(start);
+        pq.addAll(graph.getEdgesFrom(start));
 
-        for (Edge e : graph.getEdgesFrom(startNode)) {
-            pq.add(e);
-            res.operations++; // push
-        }
+        while (!pq.isEmpty() && mstEdges.size() < graph.getVertexCount() - 1) {
+            Edge edge = pq.poll();
+            operationCount++;
 
-        while (!pq.isEmpty() && res.mstEdges.size() < V - 1) {
-            Edge e = pq.poll();
-            res.operations++;
+            if (!visited.contains(edge.getTo())) {
+                visited.add(edge.getTo());
+                mstEdges.add(edge);
 
-            String u = e.getFrom();
-            String v = e.getTo();
-
-            String next;
-            if (visited.contains(u) && !visited.contains(v)) next = v;
-            else if (visited.contains(v) && !visited.contains(u)) next = u;
-            else {
-                res.operations++;
-                continue;
-            }
-
-            visited.add(next);
-            res.mstEdges.add(e);
-            res.totalCost += e.getWeight();
-
-            for (Edge adj : graph.getEdgesFrom(next)) {
-                String other = adj.getTo();
-                if (!visited.contains(other)) {
-                    pq.add(adj);
-                    res.operations++; // push
+                for (Edge next : graph.getEdgesFrom(edge.getTo())) {
+                    if (!visited.contains(next.getTo())) {
+                        pq.add(next);
+                    }
                 }
             }
         }
+        return mstEdges;
+    }
 
-        res.connected = (res.mstEdges.size() == Math.max(0, V - 1));
-        long end = System.nanoTime();
-        res.executionTimeMs = (end - start) / 1_000_000.0;
-        return res;
+    public int getOperationCount() {
+        return operationCount;
     }
 }
