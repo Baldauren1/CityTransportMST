@@ -33,14 +33,14 @@ public class Main {
             long startPrim = System.currentTimeMillis();
             MSTResult primResult = prim.run(graph);
             long endPrim = System.currentTimeMillis();
-            long primTime = (endPrim - startPrim) * 1000;
+            long primTime = endPrim - startPrim;
 
             // Run Kruskal
             KruskalMST kruskal = new KruskalMST();
             long startKruskal = System.currentTimeMillis();
             MSTResult kruskalResult = kruskal.run(graph);
             long endKruskal = System.currentTimeMillis();
-            long kruskalTime = (endKruskal - startKruskal) * 1000;
+            long kruskalTime = endKruskal - startKruskal;
 
             // Write to result JSON
             Map<String, Object> result = new HashMap<>();
