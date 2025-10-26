@@ -34,7 +34,7 @@ public class MSTAlgorithmsTest {
         assertTrue(isConnected(g, primRes.edges), "Prim MST must connect all vertices");
         assertTrue(isConnected(g, kruskalRes.edges), "Kruskal MST must connect all vertices");
 
-        System.out.println("   ✅ Same total cost, correct edge count, and connected MST.");
+        System.out.println("   Same total cost, correct edge count, and connected MST.");
     }
 
     private boolean isConnected(Graph graph, List<Edge> edges) {
