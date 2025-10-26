@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-
     public static void main(String[] args) {
 
         String inputPath = "src/main/resources/ass_3_input.json";
@@ -28,19 +27,19 @@ public class Main {
                 graph.addEdge(from, to, weight);
             }
 
-            // Run Prim
+// Run Prim
             PrimMST prim = new PrimMST();
-            long startPrim = System.currentTimeMillis();
+            long startPrim = System.nanoTime();
             MSTResult primResult = prim.run(graph);
-            long endPrim = System.currentTimeMillis();
-            long primTime = endPrim - startPrim;
+            long endPrim = System.nanoTime();
+            double primTimeMs = (endPrim - startPrim) / 1_000_000.0;
 
-            // Run Kruskal
+// Run Kruskal
             KruskalMST kruskal = new KruskalMST();
-            long startKruskal = System.currentTimeMillis();
+            long startKruskal = System.nanoTime();
             MSTResult kruskalResult = kruskal.run(graph);
-            long endKruskal = System.currentTimeMillis();
-            long kruskalTime = endKruskal - startKruskal;
+            long endKruskal = System.nanoTime();
+            double kruskalTimeMs = (endKruskal - startKruskal) / 1_000_000.0;
 
             // Write to result JSON
             Map<String, Object> result = new HashMap<>();
@@ -57,8 +56,9 @@ public class Main {
                     )).toList(),
                     "total_cost", primResult.totalCost,
                     "operations_count", primResult.operations,
-                    "execution_time_ms", primTime
+                    "execution_time_ms", primTimeMs
             ));
+
             result.put("kruskal", Map.of(
                     "mst_edges", kruskalResult.edges.stream().map(e -> Map.of(
                             "from", e.getFrom(),
@@ -67,8 +67,9 @@ public class Main {
                     )).toList(),
                     "total_cost", kruskalResult.totalCost,
                     "operations_count", kruskalResult.operations,
-                    "execution_time_ms", kruskalTime
+                    "execution_time_ms", kruskalTimeMs
             ));
+
             writer.addResult(result);
         }
 
