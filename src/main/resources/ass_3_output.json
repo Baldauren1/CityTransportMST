@@ -1,0 +1,116 @@
+{
+  "results": [
+    {
+      "prim": {
+        "mst_edges": [
+          {
+            "from": "A",
+            "weight": 3,
+            "to": "C"
+          },
+          {
+            "from": "C",
+            "weight": 2,
+            "to": "B"
+          },
+          {
+            "from": "B",
+            "weight": 5,
+            "to": "D"
+          },
+          {
+            "from": "D",
+            "weight": 6,
+            "to": "E"
+          }
+        ],
+        "operations_count": 5,
+        "execution_time_ms": 4000,
+        "total_cost": 16
+      },
+      "input_stats": {
+        "edges": 7,
+        "vertices": 5
+      },
+      "kruskal": {
+        "mst_edges": [
+          {
+            "from": "B",
+            "weight": 2,
+            "to": "C"
+          },
+          {
+            "from": "A",
+            "weight": 3,
+            "to": "C"
+          },
+          {
+            "from": "B",
+            "weight": 5,
+            "to": "D"
+          },
+          {
+            "from": "D",
+            "weight": 6,
+            "to": "E"
+          }
+        ],
+        "operations_count": 9,
+        "execution_time_ms": 1000,
+        "total_cost": 16
+      },
+      "graph_id": 1
+    },
+    {
+      "prim": {
+        "mst_edges": [
+          {
+            "from": "A",
+            "weight": 1,
+            "to": "B"
+          },
+          {
+            "from": "B",
+            "weight": 2,
+            "to": "C"
+          },
+          {
+            "from": "C",
+            "weight": 3,
+            "to": "D"
+          }
+        ],
+        "operations_count": 3,
+        "execution_time_ms": 0,
+        "total_cost": 6
+      },
+      "input_stats": {
+        "edges": 5,
+        "vertices": 4
+      },
+      "kruskal": {
+        "mst_edges": [
+          {
+            "from": "A",
+            "weight": 1,
+            "to": "B"
+          },
+          {
+            "from": "B",
+            "weight": 2,
+            "to": "C"
+          },
+          {
+            "from": "C",
+            "weight": 3,
+            "to": "D"
+          }
+        ],
+        "operations_count": 5,
+        "execution_time_ms": 0,
+        "total_cost": 6
+      },
+      "graph_id": 2
+    }
+  ]
+}
