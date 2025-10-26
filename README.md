@@ -90,15 +90,64 @@ and was used to perform statistical and graphical analysis.*
 
 ### **Performance Comparison**
 
-| Size          | Avg. Vertices | Faster Algorithm   | Comments                                          |
-| ------------- | ------------- | ------------------ | ------------------------------------------------- |
-| Small (≤30)   | ~10           | **Prim**           | Heap-based selection faster on dense small graphs |
-| Medium (≤300) | ~100          | **Prim ≈ Kruskal** | Similar performance                               |
-| Large (≤1000) | ~500          | **Kruskal**        | Sorting overhead small, Union-Find efficient      |
-| Extra-Large   | ≥1000         | **Kruskal**        | Better scalability due to simpler structure       |
+### Small graphs (id 1–6 to 5–30 vertices)
+| ID | Vertices | Prim (ms) | Kruskal (ms) | Faster      |
+| -- | -------- | --------- | ------------ | ----------- |
+| 1  | 5        | 5.96      | 1.25         | **Kruskal** |
+| 2  | 6        | 0.08      | 0.09         | **Prim**    |
+| 3  | 7        | 0.09      | 0.13         | **Prim**    |
+| 4  | 8        | 0.12      | 0.08         | **Kruskal** |
+| 5  | 9        | 0.08      | 0.11         | **Prim**    |
+| 6  | 30       | 0.15      | 0.29         | **Prim**    |
+on the small dots the advantage is slightly alternated,
+Prim wins more often (4 out of 6). The table correctly indicates Prim as faster.
 
-Prim’s algorithm is more efficient for dense graphs (many edges),
-while Kruskal’s performs better for sparse large graphs.
+### Medium graphs (id 7–16 to 60–300 vertices)
+| ID | Vertices | Prim (ms) | Kruskal (ms) | Faster |
+| -- | -------- | --------- | ------------ | ------ |
+| 7  | 60       | 0.63      | 0.80         | Prim   |
+| 8  | 90       | 0.83      | 1.23         | Prim   |
+| 9  | 120      | 0.70      | 1.66         | Prim   |
+| 10 | 150      | 0.67      | 1.79         | Prim   |
+| 11 | 180      | 0.89      | 2.01         | Prim   |
+| 12 | 210      | 0.95      | 1.67         | Prim   |
+| 13 | 230      | 0.74      | 1.88         | Prim   |
+| 14 | 260      | 1.25      | 1.98         | Prim   |
+| 15 | 290      | 1.19      | 1.67         | Prim   |
+| 16 | 300      | 1.01      | 1.73         | Prim   |
+Prim consistently faster for medium graphs <=300 vertices.
+
+### Large graphs (id 17–25 to 370–930 vertices)
+| ID | Vertices | Prim (ms) | Kruskal (ms) | Faster |
+| -- | -------- | --------- | ------------ | ------ |
+| 17 | 370      | 1.56      | 2.16         | Prim   |
+| 18 | 440      | 2.12      | 2.79         | Prim   |
+| 19 | 510      | 2.09      | 2.18         | Prim   |
+| 20 | 580      | 2.26      | 2.76         | Prim   |
+| 21 | 650      | 2.49      | 4.14         | Prim   |
+| 22 | 720      | 2.95      | 4.09         | Prim   |
+| 23 | 790      | 3.16      | 4.15         | Prim   |
+| 24 | 860      | 3.30      | 5.92         | Prim   |
+| 25 | 930      | 2.96      | 6.14         | Prim   |
+Prim remains faster even for large graphs up to 1000 vertices.
+
+### Extra-Large graphs (id 26–28 to 1000–2000 vertices)
+| ID | Vertices | Prim (ms) | Kruskal (ms) | Faster |
+| -- | -------- | --------- | ------------ | ------ |
+| 26 | 1000     | 1.71      | 5.39         | Prim   |
+| 27 | 1500     | 2.31      | 7.56         | Prim   |
+| 28 | 2000     | 3.61      | 7.74         | Prim   |
+Prim again almost 2-3 times faster.
+
+| Size              | Avg. Vertices | Faster Algorithm | Comments                                          |
+| ----------------- | ------------- | ---------------- | ------------------------------------------------- |
+| Small (≤30)       | ~10           | **Prim**         | Slightly faster overall, but varies per case.     |
+| Medium (≤300)     | ~150          | **Prim**         | Consistently faster and stable runtime.           |
+| Large (≤1000)     | ~600          | **Prim**         | Much faster; Kruskal’s sorting becomes expensive. |
+| Extra-Large ≥1000 | ~1500         | **Prim**         | 2–3× faster; scales better in dense networks.     |
+
+Based on the experimental results, Prim’s algorithm consistently outperformed Kruskal’s across all datasets — from small to extra-large graphs.
+This indicates that the generated graphs were relatively dense, where Prim’s heap-based approach is more efficient than Kruskal’s edge-sorting strategy.
 
 ---
 
