@@ -58,6 +58,7 @@ public class Main {
                     "operations_count", primResult.operations,
                     "execution_time_ms", primTimeMs
             ));
+
             result.put("kruskal", Map.of(
                     "mst_edges", kruskalResult.edges.stream().map(edge -> Map.of(
                             "from", edge.getFrom(),
@@ -70,10 +71,19 @@ public class Main {
             ));
             writer.addResult(result);
 
-            csvLines.add(String.format("%d,Kruskal,%d,%d,%.6f,%d",
-                    jsonGraph.id, jsonGraph.nodes.size(), kruskalResult.totalCost, kruskalTimeMs, kruskalResult.operations));
-            csvLines.add(String.format("%d,Prim,%d,%d,%.6f,%d",
-                    jsonGraph.id, jsonGraph.nodes.size(), primResult.totalCost, primTimeMs, primResult.operations));
+            csvLines.add(String.format(Locale.US, "%d,Kruskal,%d,%d,%.6f,%d",
+                    jsonGraph.id,
+                    jsonGraph.nodes.size(),
+                    kruskalResult.totalCost,
+                    kruskalTimeMs,
+                    kruskalResult.operations));
+
+            csvLines.add(String.format(Locale.US, "%d,Prim,%d,%d,%.6f,%d",
+                    jsonGraph.id,
+                    jsonGraph.nodes.size(),
+                    primResult.totalCost,
+                    primTimeMs,
+                    primResult.operations));
         }
 
         writer.writeOutput(outputPath);
