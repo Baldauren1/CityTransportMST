@@ -30,6 +30,19 @@ public class Main {
                 graph.addEdge(from, to, weight);
             }
 
+            // Print structure only for small graphs, which are less than 10 vertices
+            if (jsonGraph.nodes.size() <= 10) {//output will be in concole
+                System.out.println("Graph ID: " + jsonGraph.id);
+                graph.printGraph();
+                System.out.println("----------------------------");
+            }
+
+//            if (jsonGraph.nodes.size() <= 10) {
+//                System.out.println("Opening visualization for Graph ID: " + jsonGraph.id);
+//                GraphVisualizer.showGraph(graph);
+//                break; //to not open 28 windows for all type of graphs
+//            }
+
             PrimMST prim = new PrimMST();
             long startPrim = System.nanoTime();
             MSTResult primResult = prim.run(graph);
